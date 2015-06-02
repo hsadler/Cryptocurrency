@@ -10,7 +10,7 @@ function Client (id){
   this.id = id; // id == public key == address
   this.unusedValidTransactions = {}; // blockchain, contains SHAs // todo convert to array?
   this.unvalidatedTransactions = []; // need to validate these.
-};
+}
 /*
  * PLEASE EDIT
  * params: clientId, amount
@@ -18,7 +18,10 @@ function Client (id){
  * behavior: constructs a Transaction giving the amount to the clientId and the rest of the balance back to thisClient.
  */
 Client.prototype.give = function(clientId, amount) {
-
+  //our code here...
+  var thisClient = this;
+  var transaction = new Transaction(thisClient);
+  console.log(transaction);
   return transaction;
   // helper (DO NOT EDIT)
   function arrayify(obj){
@@ -105,7 +108,19 @@ Client.prototype.onReceivingSolution = function(solution, transactions, solverId
  * behavior: iterates through unusedValidTransactions, summing the amounts transactions sent to thisClient.
  */
 Client.prototype.balance = function(){
-
+  var amount = 0;
+  console.log(this);
+  for(var item in this.unusedValidTransactions) {
+    var trans = this.unusedValidTransactions[item].outputs;
+    if(trans.length > 0) {
+      for(var i = 0, len = trans.length; i < len; i++) {
+        if(trans[i].destination === this.id) {
+          amount += trans[i].amount;
+        }
+      }
+    }
+  }
+  return amount;
 };
 /*
  * PLEASE EDIT
